@@ -1,31 +1,38 @@
 const EventEmitter = require("events");
 const eventEmitter = new EventEmitter();
+const mongoose = require("mongoose");
+const keys = require("./config/keys");
 
-eventEmitter.on("done", () => console.log("done"));
-eventEmitter.on("error", () =>
-  console.log("an error occured while running the job")
-);
+mongoose.connect(keys.mongoURI);
 
-function Job(executor, time) {
-  new Promise(function (resolve, reject) {
-    if (time) {
-      setTimeout(() => executor(), time);
-      resolve(eventEmitter.emit("done"));
-    } else {
-      executor();
-      resolve(eventEmitter.emit("done"));
-    }
-  }).catch((err) => eventEmitter.emit("error"));
+require("./models/Job");
+require("./schedulerService");
+
+const Job = mongoose.model("jobs");
+
+function seedData() {
+  require("./schedulerService").scheduleJob(function () {
+    console.log("running job 1");
+  }, 1000);
+  require("./schedulerService").scheduleJob(function () {
+    console.log("running job 2");
+  }, 3000);
+  require("./schedulerService").scheduleJob(function () {
+    console.log("running job 3");
+  }, 5000);
+  require("./schedulerService").scheduleJob(function () {
+    console.log("running job 4");
+  }, 7000);
 }
 
-new Job(function () {
-  console.log("running job...");
+eventEmitter.on("seeded", (count) => {
+  console.log("Jobs scheduled: ", count);
+  require("./schedulerService").getAllJobs();
 });
 
-new Job(function () {
-  console.log("running job after 5 seconds");
-}, 5000);
-
-new Job(function () {
-  throw new Error();
+Job.countDocuments().then((count) => {
+  if (count === 0) {
+    seedData(count);
+  }
+  eventEmitter.emit("seeded", count);
 });

@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "mongoose": "^5.13.7",
+    "mongoose-function": "^0.1.0",
+    "nodemon": "^2.0.12"
+  },
+  "name": "eventbeep-assessment",
+  "version": "1.0.0",
+  "main": "scheduler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon scheduler.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aryan2299/EventBeep-assessment.git"
+  },
+  "author": "Aryan Sharma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aryan2299/EventBeep-assessment/issues"
+  },
+  "homepage": "https://github.com/Aryan2299/EventBeep-assessment#readme",
+  "description": ""
+}
